@@ -1,0 +1,7 @@
+{
+  "name": "FinanceHub - Sales Vouchers System",
+  "description": "A comprehensive system for managing sales representative receipt and payment vouchers with a real-time financial manager dashboard.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
