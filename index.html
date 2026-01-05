@@ -12,11 +12,19 @@
         font-family: 'Tajawal', sans-serif;
         background-color: #f8fafc;
       }
+      .live-pulse {
+        animation: pulse-animation 2s infinite;
+      }
+      @keyframes pulse-animation {
+        0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.7); }
+        100% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
     "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.45.0",
     "recharts": "https://esm.sh/recharts@^3.6.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
@@ -27,8 +35,5 @@
 </head>
   <body>
     <div id="root"></div>
-    <!-- end list -->
-    <script type="module" src="/index.tsx"></script>
-      <!-- end list -->
-
+  </body>
 </html>

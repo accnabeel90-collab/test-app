@@ -3,7 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 import { Transaction, SalesRep } from "../types";
 
 export const getFinancialSummary = async (transactions: Transaction[], reps: SalesRep[]) => {
-  const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+  // Create a new instance right before making an API call to ensure it uses the most up-to-date API key
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   const dataContext = `
     Current transactions: ${JSON.stringify(transactions)}
@@ -12,19 +13,26 @@ export const getFinancialSummary = async (transactions: Transaction[], reps: Sal
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-lite-latest',
+      model: 'gemini-3-pro-preview',
       contents: `
         Analyze this financial data for a sales management system. 
-        Provide a brief summary in Arabic (maximum 3 bullet points) regarding:
-        1. Overall cash health.
-        2. Any suspicious or high-spending representatives.
-        3. A quick recommendation for the financial manager.
+        Provide a professional, deep financial summary in Arabic (maximum 4 bullet points) regarding:
+        1. Overall cash health and liquidity.
+        2. Performance of sales reps based on their collections vs payments.
+        3. Identification of any risks (e.g., negative balances).
+        4. Strategic recommendation for the financial manager to optimize cash flow.
         Data Context: ${dataContext}
       `,
+      config: {
+        thinkingConfig: { thinkingBudget: 16000 }
+      }
     });
     return response.text;
-  } catch (error) {
+  } catch (error: any) {
     console.error("AI Analysis error:", error);
-    return "تعذر الحصول على تحليل الذكاء الاصطناعي حالياً.";
+    if (error?.message?.includes("Requested entity was not found")) {
+      return "ERROR_KEY_NOT_FOUND";
+    }
+    return "تعذر الحصول على تحليل الذكاء الاصطناعي حالياً. يرجى التأكد من صلاحية مفتاح الـ API.";
   }
 };

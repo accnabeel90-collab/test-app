@@ -28,7 +28,13 @@ const FinancialDashboard: React.FC<DashboardProps> = ({ state, onApprove, onReje
   const handleAiAnalyze = async () => {
     setLoadingAi(true);
     const summary = await getFinancialSummary(state.transactions, state.reps);
-    setAiAnalysis(summary || '');
+    
+    if (summary === "ERROR_KEY_NOT_FOUND") {
+      setAiAnalysis("حدث خطأ في صلاحية المفتاح. يرجى إعادة ضبط إعدادات الـ API.");
+      // In a real app, you might trigger window.location.reload() or reset key state here
+    } else {
+      setAiAnalysis(summary || '');
+    }
     setLoadingAi(false);
   };
 
@@ -44,16 +50,16 @@ const FinancialDashboard: React.FC<DashboardProps> = ({ state, onApprove, onReje
           disabled={loadingAi}
           className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-2xl shadow-lg hover:opacity-90 transition-all disabled:opacity-50"
         >
-          {loadingAi ? 'جاري التحليل...' : '✨ تحليل الذكاء الاصطناعي'}
+          {loadingAi ? 'جاري التحليل...' : '✨ تحليل الذكاء الاصطناعي Pro'}
         </button>
       </header>
 
       {aiAnalysis && (
         <div className="bg-indigo-50 border border-indigo-100 p-6 rounded-3xl animate-in slide-in-from-top-4 duration-300">
           <h3 className="text-indigo-900 font-bold mb-3 flex items-center gap-2">
-            <span>✨</span> تقرير ذكاء الأعمال:
+            <span>✨</span> تقرير ذكاء الأعمال المتقدم:
           </h3>
-          <div className="text-indigo-800 whitespace-pre-line leading-relaxed">
+          <div className="text-indigo-800 whitespace-pre-line leading-relaxed text-sm md:text-base">
             {aiAnalysis}
           </div>
         </div>
