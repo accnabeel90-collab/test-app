@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { Transaction, SalesRep } from "../types";
 
 export const getFinancialSummary = async (transactions: Transaction[], reps: SalesRep[]) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
   
   const dataContext = `
     Current transactions: ${JSON.stringify(transactions)}
